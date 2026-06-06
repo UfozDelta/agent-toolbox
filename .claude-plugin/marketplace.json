@@ -1,0 +1,11 @@
+{
+  "name": "ufoz",
+  "owner": { "name": "UfozDelta" },
+  "plugins": [
+    {
+      "name": "ufoz",
+      "source": "./",
+      "description": "Personal toolkit of Claude Code skills (AnvilCV extractor + more)."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "ufoz",
+  "description": "Personal toolkit of Claude Code skills. Includes the AnvilCV codebase context extractor.",
+  "version": "1.0.0",
+  "author": { "name": "UfozDelta" },
+  "homepage": "https://github.com/UfozDelta/agent-toolbox"
+}
