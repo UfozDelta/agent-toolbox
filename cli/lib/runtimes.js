@@ -78,6 +78,15 @@ export function preflight(selection) {
     missing.push({ need: 'npx', why: 'caveman / react-doctor install', fix: 'install Node.js ≥18 (includes npx): https://nodejs.org' });
   }
 
+  // Ponytail installs via the Claude Code CLI (`claude plugin install`).
+  if (selection.ponytail && !has('claude')) {
+    missing.push({
+      need: 'claude (Claude Code CLI)',
+      why: 'ponytail install (`claude plugin install`)',
+      fix: 'install Claude Code so the `claude` CLI is on PATH: https://claude.com/code',
+    });
+  }
+
   // Graphify: any python installer (uv > pipx > pip). graphifyy builds cleanly.
   if (selection.graphify && !pythonInstaller()) {
     missing.push({
