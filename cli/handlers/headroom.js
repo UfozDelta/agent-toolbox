@@ -2,6 +2,8 @@ import { spawnSync } from 'node:child_process';
 import { delimiter } from 'node:path';
 import { runOrThrow, run as exec } from '../lib/exec.js';
 import { pythonAtLeast } from '../lib/runtimes.js';
+import { ensureUserPath } from '../lib/path.js';
+import { log } from '../lib/log.js';
 
 // Headroom = token-compression layer ("context optimization"). The real
 // `headroom` CLI ships in the PYTHON package `headroom-ai` (the npm package of
@@ -55,5 +57,18 @@ export async function run({ cwd }) {
       `headroom installed but \`headroom init claude\` exited ${code}. ` +
         `Run it manually: ${scripts ? scripts + '\\' : ''}headroom init claude`,
     );
+  }
+
+  // Durably put the scripts dir on the user's PATH so `headroom` resolves in new
+  // shells (the env.PATH prepend above only covered this process).
+  if (scripts) {
+    const r = ensureUserPath(scripts);
+    if (r === 'added') {
+      log.success(`Added ${scripts} to your user PATH — open a new terminal to use \`headroom\`.`);
+    } else if (r === 'present') {
+      log.dim('headroom scripts dir already on PATH.');
+    } else {
+      log.warn(`Could not update PATH automatically. Add this dir yourself: ${scripts}`);
+    }
   }
 }

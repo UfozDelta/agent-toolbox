@@ -1,10 +1,11 @@
-import { join } from 'node:path';
-import { mergeIntoJsonFile } from '../lib/mergeJson.js';
+import { runOrThrow } from '../lib/exec.js';
 
-// Ponytail is a Claude Code plugin. CC reads `extraKnownMarketplaces` +
-// `enabledPlugins` from project .claude/settings.json on launch, so we wire it
-// declaratively (no live session needed). Format verified against a real
-// ~/.claude/settings.json.
+// Install ponytail as a real project-scoped Claude Code plugin. Declaring it in
+// settings.json is NOT enough — CC activates a plugin for a project only when a
+// per-project install record exists in ~/.claude/plugins/installed_plugins.json,
+// which only `claude plugin install` writes. Both calls are idempotent. Requires
+// the `claude` CLI and a plain terminal (running the wizard inside a CC session
+// is unsupported — nested claude).
 export const meta = {
   key: 'ponytail',
   label: 'Ponytail',
@@ -12,15 +13,14 @@ export const meta = {
 };
 
 export async function run({ cwd }) {
-  const settingsPath = join(cwd, '.claude', 'settings.json');
-  mergeIntoJsonFile(settingsPath, {
-    extraKnownMarketplaces: {
-      ponytail: {
-        source: { source: 'github', repo: 'DietrichGebert/ponytail' },
-      },
-    },
-    enabledPlugins: {
-      'ponytail@ponytail': true,
-    },
-  });
+  await runOrThrow(
+    'claude',
+    ['plugin', 'marketplace', 'add', 'DietrichGebert/ponytail', '--scope', 'project'],
+    { cwd },
+  );
+  await runOrThrow(
+    'claude',
+    ['plugin', 'install', 'ponytail@ponytail', '--scope', 'project'],
+    { cwd },
+  );
 }

@@ -40,7 +40,7 @@ sections — **Core** installs machine-wide, everything else is per-project:
 | Caveman | runs `npx github:JuliusBrussee/caveman -- --only claude` |
 | Karpathy CLAUDE.md | writes an opinionated `CLAUDE.md` (appends, never clobbers) |
 | Supabase MCP | writes a Supabase server block to `.mcp.json` (token gitignored) |
-| Ponytail | wires the plugin into `.claude/settings.json` |
+| Ponytail | runs `claude plugin install ponytail@ponytail` (project scope) |
 
 **Addons** (per-project skills)
 
@@ -51,8 +51,12 @@ sections — **Core** installs machine-wide, everything else is per-project:
 | React-Doctor | runs `npx react-doctor@latest install` |
 
 All writes are non-destructive and the wizard is idempotent (safe to re-run).
-If a required runtime (npm/npx/uv/pipx/pip) for a selected tool is missing, it
-aborts **before** making any changes and tells you what to install.
+If a required runtime (npm/npx/uv/pipx/pip, the `claude` CLI for Ponytail, or
+Python ≥3.10 for Headroom) for a selected tool is missing, it aborts **before**
+making any changes and tells you what to install.
+
+Run the wizard in a plain terminal, not inside a Claude Code session — Ponytail
+installs via the `claude` CLI, which can't be nested.
 
 ## Local development
 
