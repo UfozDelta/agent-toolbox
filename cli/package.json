@@ -1,6 +1,6 @@
 {
   "name": "ufoz-tools",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "One-shot setup wizard that installs a chosen set of Claude Code tools (caveman, ponytail, headroom, graphify, react-doctor, anvilCV, Supabase MCP) into the current project.",
   "type": "module",
   "bin": {
